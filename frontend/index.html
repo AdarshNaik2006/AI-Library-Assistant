@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universal AI Library Assistant | 1st Standard to University</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <div class="header-brand">
+                <div class="brand-icon">📚</div>
+                <div>
+                    <h1 class="brand-title">Universal AI Library Assistant</h1>
+                    <p class="brand-subtitle">Smart Resource Navigator &bull; 1st Standard to University &bull; Kannada &amp; English &bull; Local Ollama (llama3.2:3b)</p>
+                </div>
+            </div>
+            <div class="header-status" id="systemStatus">
+                <span class="status-dot"></span>
+                <span id="statusText">Checking Ollama...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Tab Switcher -->
+    <div class="mobile-tabs" id="mobileTabs">
+        <button class="tab-btn active" data-tab="chatSection">💬 AI Assistant</button>
+        <button class="tab-btn" data-tab="catalogSection">📖 Library Catalogue</button>
+    </div>
+
+    <main class="main-layout">
+        <!-- Section 1: Chatbot Assistant -->
+        <section class="chat-section active-tab" id="chatSection">
+            <div class="panel-header">
+                <div class="panel-title-group">
+                    <span class="panel-icon">🤖</span>
+                    <div>
+                        <h2 class="panel-title">AI Study Assistant</h2>
+                        <p class="panel-desc">Ask for book recommendations, learning roadmaps, or study plans in English or Kannada (ಕನ್ನಡ)</p>
+                    </div>
+                </div>
+                <button id="clearChatBtn" class="secondary-btn" title="Clear chat history">Clear Chat</button>
+            </div>
+
+            <!-- Quick Suggestion Chips -->
+            <div class="suggestions-wrapper">
+                <span class="suggestions-label">Suggestions:</span>
+                <div class="suggestions-chips">
+                    <button class="chip-btn" data-query="Recommend 3rd Standard English books">3rd Std English books</button>
+                    <button class="chip-btn" data-query="5ನೇ ತರಗತಿಯ ಗಣಿತ ಪುಸ್ತಕ ಶಿಫಾರಸು ಮಾಡಿ">5ನೇ ತರಗತಿ ಗಣಿತ (Kannada)</button>
+                    <button class="chip-btn" data-query="Explain 8th Standard Science concepts">8th Std Science concepts</button>
+                    <button class="chip-btn" data-query="Recommend 10th Standard Mathematics books">10th Std Mathematics</button>
+                    <button class="chip-btn" data-query="Recommend 2nd PUC Physics books">2nd PUC Physics</button>
+                    <button class="chip-btn" data-query="Recommend Diploma-level subject textbooks">Diploma subjects</button>
+                    <button class="chip-btn" data-query="Recommend Engineering Mathematics M2 books">Engineering Math M2</button>
+                    <button class="chip-btn" data-query="Suggest Python books for beginners">Python for beginners</button>
+                </div>
+            </div>
+
+            <!-- Chat Input Area (Positioned above messages as required) -->
+            <form class="chat-input-form" id="chatForm">
+                <input 
+                    type="text" 
+                    id="chatInput" 
+                    placeholder="Ask a question in English or Kannada (e.g. 'Recommend 10th Standard Mathematics books' or '5ನೇ ತರಗತಿಯ ಗಣಿತ ಪುಸ್ತಕ')..." 
+                    autocomplete="off"
+                    required
+                >
+                <button type="submit" id="sendBtn" class="primary-btn">
+                    <span>Send</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </form>
+
+            <!-- Chat Messages Log (Positioned below input bar) -->
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <p>Namaskara / Hello! I am your <strong>Universal AI Library Assistant</strong>, powered 100% locally by <strong>Ollama (llama3.2:3b)</strong>.</p>
+                        <p>I support students across <strong>ALL educational levels</strong> (1st Standard to University &amp; Postgraduate: Primary, Middle, High School / SSLC, PUC, Diploma, Engineering, Science, Arts, and Commerce) in both <strong>Kannada (ಕನ್ನಡ)</strong> and <strong>English</strong>.</p>
+                        <p>What subject, class, or learning topic would you like assistance with today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div class="typing-indicator" id="typingIndicator" style="display: none;">
+                <div class="message assistant-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content typing-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Library Catalogue & Search -->
+        <section class="catalog-section" id="catalogSection">
+            <div class="panel-header">
+                <div class="panel-title-group">
+                    <span class="panel-icon">📖</span>
+                    <div>
+                        <h2 class="panel-title">Library Catalogue</h2>
+                        <p class="panel-desc">Browse and filter verified textbooks from DSERT, NCERT, and standard universities</p>
+                    </div>
+                </div>
+                <span class="catalog-counter" id="catalogCounter">Loading...</span>
+            </div>
+
+            <!-- Filter and Search Controls -->
+            <div class="filter-controls">
+                <div class="search-box">
+                    <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="searchInput" placeholder="Search by title, author, subject, or class...">
+                    <button type="button" id="clearSearchBtn" class="clear-input-btn" title="Clear search" style="display: none;">&times;</button>
+                </div>
+
+                <div class="filter-dropdowns">
+                    <div class="select-group">
+                        <label for="eduLevelFilter">Education Level</label>
+                        <select id="eduLevelFilter">
+                            <option value="">All Levels</option>
+                            <option value="Primary School">Primary (1st - 5th)</option>
+                            <option value="Middle School">Middle (6th - 8th)</option>
+                            <option value="High School">High School (9th - 10th)</option>
+                            <option value="PUC">PUC (11th &amp; 12th)</option>
+                            <option value="Diploma">Diploma / Polytechnic</option>
+                            <option value="Undergraduate">Undergraduate (UG)</option>
+                            <option value="Postgraduate">Postgraduate (PG)</option>
+                        </select>
+                    </div>
+
+                    <div class="select-group">
+                        <label for="subjectFilter">Subject</label>
+                        <select id="subjectFilter">
+                            <option value="">All Subjects</option>
+                        </select>
+                    </div>
+
+                    <div class="select-group">
+                        <label for="levelFilter">Skill Level</label>
+                        <select id="levelFilter">
+                            <option value="">All Difficulties</option>
+                            <option value="Beginner">Beginner / Foundation</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="resetFiltersBtn" class="reset-btn" title="Reset filters">Reset</button>
+                </div>
+            </div>
+
+            <!-- Catalogue Resources Grid -->
+            <div class="resources-grid" id="resourcesGrid">
+                <!-- Dynamically populated resource cards -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Book Details Modal / Popup -->
+    <div class="modal-backdrop" id="bookModalBackdrop" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modalBookTitle">
+            <div class="modal-header">
+                <div class="modal-title-wrap">
+                    <span class="modal-icon">📖</span>
+                    <h3 class="modal-title" id="modalHeaderTitle">Book Details</h3>
+                </div>
+                <button type="button" class="modal-close-btn" id="modalCloseBtn" aria-label="Close dialog">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamically populated book details -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <button type="button" class="secondary-btn" id="modalCloseFooterBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="app-footer">
+        <p>Universal AI Library Assistant &bull; 1st Standard to University &bull; Kannada &amp; English &bull; Flask + SQLite + Ollama (Local llama3.2:3b)</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
