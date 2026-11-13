@@ -226,7 +226,9 @@ def handle_500(e):
 
 if __name__ == "__main__":
     # Local development server
+    host = os.getenv("HOST", "127.0.0.1")
     port = int(os.getenv("PORT", 5000))
-    print(f"Starting Universal AI Library Assistant at http://127.0.0.1:{port}")
-    print(f"Connecting to local Ollama at {get_ollama_base_url()} (model: {get_model_name()})")
-    app.run(host="127.0.0.1", port=port, debug=True)
+    debug = os.getenv("FLASK_DEBUG", "1" if host == "127.0.0.1" else "0").lower() in ("1", "true")
+    print(f"Starting Universal AI Library Assistant at http://{host}:{port}")
+    print(f"Connecting to Ollama at {get_ollama_base_url()} (model: {get_model_name()})")
+    app.run(host=host, port=port, debug=debug)
